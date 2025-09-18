@@ -18,10 +18,8 @@ void render_init(void);
 void render_clean(void);
 void grabar_imagen(void);
 
-//------------------ Window Flags ------------------//
-#define SDL_WINDOW_OPENGL   SDL_UINT64_C(0x0000000000000002)    /**< window usable with OpenGL context */
+#define SDL_WINDOW_OPENGL   SDL_UINT64_C(0x0000000000000002)
 
-//----------------- Visual Pointers ---------------//
 SDL_Window *window = NULL;
 
 int main(int argc, char** argv) {

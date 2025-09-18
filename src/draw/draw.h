@@ -18,10 +18,12 @@ void draw_linea_lerp(Vec2 p1, Vec2 p2, uint32_t color);
 void draw_curva(Vec2 p1, Vec2 p2, Vec2 p3, uint32_t color);
 
 // test
-int puedeRellenar(int x, int y, uint32_t colorRelleno, uint32_t colorBorde);
-void rellenar_generico(int x, int y, uint32_t colorRelleno, uint32_t colorBorde);
-void fill_circulo(Circulo *c, uint32_t color);
-void fill_cuadrado(Cuadro *c, uint32_t color);
+void rellenar_figura(void *figura, uint32_t color);
+void rellenar(Vec2 *start, uint32_t color);
+uint32_t getColor(Vec2 *pixel);
 
 // Relleno triangulo
 void fill_triangulo(Triangulo *triangulo, uint32_t color);
+void fill_flat_bottom(Vec2 p1,Vec2 p2, Vec2 p3, uint32_t color);
+void fill_flat_top(Vec2 p1,Vec2 p2, Vec2 p3, uint32_t color);
+void ordenar_y(Vec2 *y);

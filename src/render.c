@@ -6,6 +6,7 @@
 #include "draw/figuras.h"
 #include "memoria/memoria.h"
 #include "color/colores.h"
+#include "HUD/boton.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -47,6 +48,12 @@ Vec2* pivote_mas_cerca(Vec2 mp, Figuras *figs, float umbral) {
 }
 
 void update() {
+    
+    for(int i = 0 ; i < array_size(estadosrender.botones_buffer) ; i++) {
+        draw_boton(&estadosrender.botones_buffer[i]);
+        capturar_boton(&estadosrender.botones_buffer[i]);
+    }
+
     for(int i = 0 ; i < array_size(estadosrender.figuras_buffer) ; i++) {
         draw_figura(&estadosrender.figuras_buffer[i]);
     }
@@ -77,7 +84,6 @@ void render_input(void) {
             printf("Punto cercano (%.3f, %.3f)\n", pivote -> unpack.x, pivote -> unpack.y);
         }
     } else if (estadosrender.evento.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-        // Modificar la figura
         if(punto_seleccionado) {
             punto_seleccionado->unpack.x = estadosrender.evento.motion.x;
             punto_seleccionado->unpack.y = estadosrender.evento.motion.y;
@@ -86,7 +92,7 @@ void render_input(void) {
     }
 }
 
-void clear_color_buffer(){
+void clear_color_buffer() {
     for(int y = 0; y < estadosrender.w_height; ++y){
         for(int x = 0; x < estadosrender.w_width; ++x){
             draw_pixel(x, y, estadosrender.clear_color.hex);
@@ -94,7 +100,7 @@ void clear_color_buffer(){
     }
 }
 
-void copy_buffer_to_texture(){
+void copy_buffer_to_texture() {
     SDL_UpdateTexture(estadosrender.texture, 
                       NULL, 
                       estadosrender.color_buffer, 
@@ -106,65 +112,97 @@ void copy_buffer_to_texture(){
                       NULL);
 }
 
-void _Init(){
-    Vec2 pc1 = {{400.f, 360.f}};
-    Vec2 pc2 = {{600.f, 100.f}};
-    Vec2 pc3 = {{800.f, 360.f}};
-    
-    Linea linea = {
-        .p1 = (Vec2){{800, 100}},
-        .p2 = (Vec2){{600, 250}},
-        .offset_mem1 = {0},
-        .color = (Color){0xAB00ABFF},
-        .type = LINEA
-    };
+void _Init() {
+    int boton_alto = 50;
+    int boton_largo = boton_alto + (boton_alto / 2);
 
-    Curva curva = {
-        .p1 = pc1,
-        .p2 = pc2,
-        .p3 = pc3,
-        .color = (Color){0xFFFF00FF},
-        .type = CURVA
-    };
-
-    Circulo circ = {
-        .pos = {{estadosrender.w_width/2.f, estadosrender.w_height/2.f}},
-        .r = 20.f,
-        .vert = 32,
-        .offset_mem1 = {0},
-        .color = (Color){0x00FFFFFF},
-        .type = CIRC
-    };
-
-    Cuadro cuadro = {
-        .pos = {.unpack = {.x = 140, .y = 140}},
-        .h = 200,
-        .w = 200,
+    Cuadro boton_cuadrado_fig = {
+        .pos = {.unpack = {.x = 50 + (boton_largo / 3.f), .y = 10 + (boton_alto / 5.f)}},
+        .w = (boton_alto / 5.f) * 3,
+        .h = (boton_alto / 5.f) * 3,
         .offset_mem1 = {0},
         .color = (Color){0x140140FF},
         .type = CUADRO
     };
 
-    Triangulo triangulo = {
-        .p1 = {.unpack = {.x = 400, .y = 360}},
-        .p2 = {.unpack = {.x = 600, .y = 100}},
-        .p3 = {.unpack = {.x = 800, .y = 360}},
-        .color = (Color){0xFFFFFFFF},
+    Circulo boton_circulo_fig = {
+        .pos = {.unpack = {.x = 150 + (boton_largo / 2.f), .y = 10 + (boton_alto / 2.f)}},
+        .r = (boton_alto / 10.f) * 3,
+        .offset_mem1 = {0},
+        .color = (Color){0x140140FF},
+        .type = CIRC
+    };
+    
+    Triangulo boton_triangulo_fig = {
+        .p1 = {.unpack = {.x = 250 + (boton_largo / 3.f), .y = 10 + (boton_alto / 3.f) * 2}},
+        .p2 = {.unpack = {.x = 250 + (boton_largo / 2.f), .y = 10 + (boton_alto / 3.f)}},
+        .p3 = {.unpack = {.x = 250 + (boton_largo / 3.f) * 2, .y = 10 + (boton_alto / 3.f) * 2}},
+        .color = (Color){0x140140FF},
         .type = TRIAN
     };
+    
+    // --- Iconos para los nuevos botones de color ---
+    Cuadro icono_borde = {
+        .pos = {.unpack = {.x = 350 + 15, .y = 10 + 10}},
+        .w = boton_alto - 20, .h = boton_alto - 20,
+        .color = (Color){0x00FF00FF}, .type = CUADRO
+    };
 
+    Cuadro icono_relleno = {
+        .pos = {.unpack = {.x = 450 + 15, .y = 10 + 10}},
+        .w = boton_alto - 20, .h = boton_alto - 20,
+        .color = (Color){0xFF0000FF}, .type = CUADRO
+    };
+    // ---------------------------------------------
 
-    Figuras test = {.linea = linea};
-    Figuras test2 = {.curva = curva};
-    Figuras test3 = {.circulo = circ};
-    Figuras test4 = {.cuadro = cuadro};
-    Figuras test5 = {.triangulo = triangulo};
+    Figuras tipo_cuadro = {.cuadro = boton_cuadrado_fig};
+    Figuras tipo_circ = {.circulo = boton_circulo_fig};
+    Figuras tipo_trian = {.triangulo = boton_triangulo_fig};
+    
+    Boton boton1 = {
+        .pos = {.unpack = {.x = 50, .y = 10}},
+        .largo = boton_largo, .alto = boton_alto,
+        .fig = tipo_cuadro,
+        .tipo = BOTON_TIPO_FIGURA // Asignar tipo
+    };
 
-    pushto_array(estadosrender.figuras_buffer, test);
-    pushto_array(estadosrender.figuras_buffer, test2);
-    pushto_array(estadosrender.figuras_buffer, test3);
-    pushto_array(estadosrender.figuras_buffer, test4);
-    pushto_array(estadosrender.figuras_buffer, test5);
+    Boton boton2 = {
+        .pos = {.unpack = {.x = 150, .y = 10}},
+        .largo = boton_largo, .alto = boton_alto,
+        .fig = tipo_circ,
+        .tipo = BOTON_TIPO_FIGURA // Asignar tipo
+    };
+    
+    Boton boton3 = {
+        .pos = {.unpack = {.x = 250, .y = 10}},
+        .largo = boton_largo, .alto = boton_alto,
+        .fig = tipo_trian,
+        .tipo = BOTON_TIPO_FIGURA // Asignar tipo
+    };
+
+    // --- Definicion de los nuevos botones ---
+    Boton boton_borde = {
+        .pos = {.unpack = {.x = 350, .y = 10}},
+        .largo = boton_largo, .alto = boton_alto,
+        .fig.cuadro = icono_borde,
+        .tipo = BOTON_TIPO_COLOR_BORDE
+    };
+
+    Boton boton_relleno = {
+        .pos = {.unpack = {.x = 450, .y = 10}},
+        .largo = boton_largo, .alto = boton_alto,
+        .fig.cuadro = icono_relleno,
+        .tipo = BOTON_TIPO_COLOR_RELLENO
+    };
+    // -------------------------------------
+
+    pushto_array(estadosrender.botones_buffer, boton1);
+    pushto_array(estadosrender.botones_buffer, boton2);
+    pushto_array(estadosrender.botones_buffer, boton3);
+    // --- Añadir nuevos botones al buffer ---
+    pushto_array(estadosrender.botones_buffer, boton_borde);
+    pushto_array(estadosrender.botones_buffer, boton_relleno);
+    // --------------------------------------
 }
 
 void render_frame() {
