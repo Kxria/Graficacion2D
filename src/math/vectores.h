@@ -19,4 +19,16 @@ typedef union _vec3{
     }unpack;
 }Vec3;
 
+typedef union _vec4 {
+    float data[4];
+
+    struct {
+    
+        float x;
+        float y;
+        float z;
+        float w;
+    }unpack;
+}Vec4;
+
 float distanciav2(Vec2 p1, Vec2 p2);

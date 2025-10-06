@@ -30,9 +30,12 @@ typedef struct  _circulo {
 }Circulo;
 
 typedef struct _triangulo {
-    Vec2 p1;
-    Vec2 p2;
-    Vec2 p3;
+    // Vec2 p1;
+    // Vec2 p2;
+    // Vec2 p3;
+
+    Vec2 p[3];
+    
     Color color;
     TypeFig type;
 }Triangulo;

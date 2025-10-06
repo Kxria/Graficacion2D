@@ -39,9 +39,9 @@ void draw_figura(Figuras *fig) {
         case TRIAN: {
             Triangulo triangulo = fig -> triangulo;
 			
-            draw_trian(triangulo.p1.unpack.x, triangulo.p1.unpack.y,
-                       triangulo.p2.unpack.x, triangulo.p2.unpack.y,
-                       triangulo.p3.unpack.x, triangulo.p3.unpack.y,
+            draw_trian(triangulo.p[0].unpack.x, triangulo.p[0].unpack.y,
+                       triangulo.p[1].unpack.x, triangulo.p[1].unpack.y,
+                       triangulo.p[2].unpack.x, triangulo.p[2].unpack.y,
                        triangulo.color.hex);
 					   
             rellenar_figura(&triangulo, triangulo.color.hex);

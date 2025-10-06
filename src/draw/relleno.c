@@ -187,7 +187,7 @@ uint32_t getColor(Vec2 *pixel) {
 void fill_triangulo(Triangulo *triangulo, uint32_t color) {
     float cy, cx;
 
-    Vec2 y[3] = {triangulo -> p1, triangulo -> p2, triangulo -> p3};
+    Vec2 y[3] = {triangulo -> p[0], triangulo -> p[1], triangulo -> p[2]};
     ordenar_y(y);
 
     if (y[1].unpack.y == y[2].unpack.y) {

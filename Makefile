@@ -19,4 +19,4 @@ run:
 # gcc $(cflags) $(DVAR) $(source) -o $(output) -I$(sdl_include) -L$(sdl_lib) -lm
 	
 # cd C:\Users\hugog\OneDrive\Documentos\6to Semestre\Graficacion\practica_0
-# mingw32-make build DVAR=-DLINEA_BRM
+# mingw32-make build DVAR=-DLINEA_ALIAS
